@@ -1,36 +1,23 @@
 #!groovy
 pipeline {
     agent any
-    options { skipDefaultCheckout true }
     stages {
-        stage('Checkout'){
+        stage('Crear Archivo'){
             steps {
-                checkout scm
+                sh 'touch archivo.txt'
             }
         }
-        stage('Build') {
-            environment {
-                DOCKER_IMAGE = 'etejeda/hello-app-golang'
-            }
+        stage('Ingresando datos archivos') {
+            
             steps {
-                script {
-                    def customImage = docker.build("${DOCKER_IMAGE}", " -f hello-app/Dockerfile .")
-                    docker.withRegistry("", 'dockerHub') {
-                        customImage.push("${BUILD_NUMBER}")
-                    }
-                }
+                echo 'Ingresando datos archivo'
+                sh 'echo hola > archivo.txt'
             }
         }
-        stage('Test'){
+        stage('Enlisto'){
             steps {
                 echo 'Unit Tests'
-            }
-        }
-        stage('Deploy to Production'){
-            steps {
-                script {
-                    echo 'Hey!'
-                }
+                sh 'ls'
             }
         }
     }
